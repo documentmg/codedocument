@@ -1,0 +1,165 @@
+/* docs/stylesheets/nav-scroll.css */
+/* 增强版：支持滚轮滚动 */
+
+/* 确保导航容器可滚动 */
+.md-tabs__list {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: thin; /* Firefox */
+  scroll-behavior: smooth;
+  cursor: grab;
+  -webkit-overflow-scrolling: touch; /* iOS 平滑滚动 */
+}
+
+/* 正在拖拽时的样式 */
+.md-tabs__list.dragging {
+  cursor: grabbing;
+  user-select: none;
+}
+
+/* 隐藏滚动条但保持滚动功能 */
+.md-tabs__list::-webkit-scrollbar {
+  height: 6px;
+}
+
+.md-tabs__list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.md-tabs__list::-webkit-scrollbar-thumb {
+  background: var(--md-primary-fg-color--light);
+  border-radius: 3px;
+  transition: background 0.3s;
+}
+
+.md-tabs__list::-webkit-scrollbar-thumb:hover {
+  background: var(--md-primary-fg-color);
+}
+
+/* 确保导航项不换行 */
+.md-tabs__item {
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  transition: transform 0.2s;
+}
+
+/* 鼠标悬停在导航项上时的效果 */
+.md-tabs__item:hover {
+  transform: translateY(-1px);
+}
+
+/* 导航容器样式 */
+.md-header__inner {
+  position: relative;
+  overflow: visible !important;
+}
+
+/* 添加渐变遮罩效果，增强滚动感知 */
+.md-tabs {
+  position: relative;
+  overflow: hidden;
+}
+
+.md-tabs::before,
+.md-tabs::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  z-index: 10;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+.md-tabs::before {
+  left: 0;
+  background: linear-gradient(to right, 
+    var(--md-default-bg-color) 0%,
+    transparent 100%);
+}
+
+.md-tabs::after {
+  right: 0;
+  background: linear-gradient(to left, 
+    var(--md-default-bg-color) 0%,
+    transparent 100%);
+}
+
+/* 根据滚动状态调整遮罩透明度 */
+.md-tabs.scroll-start::before {
+  opacity: 0;
+}
+
+.md-tabs.scroll-end::after {
+  opacity: 0;
+}
+
+.md-tabs.scroll-middle::before,
+.md-tabs.scroll-middle::after {
+  opacity: 1;
+}
+
+/* 按钮悬停区域的扩展 */
+.md-tabs__list {
+  padding: 0 10px !important;
+}
+
+/* 滚动指示器动画 */
+@keyframes scrollHint {
+  0%, 100% {
+    transform: translateX(-10px);
+  }
+  50% {
+    transform: translateX(10px);
+  }
+}
+
+/* 添加滚动提示动画（仅初次显示） */
+.md-tabs__list:after {
+  content: '↔';
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--md-primary-fg-color);
+  font-size: 20px;
+  animation: scrollHint 2s infinite;
+  opacity: 0.7;
+  display: none;
+}
+
+.md-tabs__list.scrollable:after {
+  display: block;
+}
+
+/* 响应式调整 */
+@media screen and (max-width: 768px) {
+  .md-tabs__list {
+    padding: 0 5px !important;
+  }
+  
+  .nav-scroll-btn {
+    width: 30px !important;
+    height: 30px !important;
+    font-size: 18px !important;
+  }
+  
+  .md-tabs::before,
+  .md-tabs::after {
+    width: 20px;
+  }
+}
+
+/* 键盘导航支持 */
+.md-tabs__item:focus {
+  outline: 2px solid var(--md-primary-fg-color);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* 平滑过渡效果 */
+.md-tabs__link {
+  transition: color 0.2s, background-color 0.2s;
+}
